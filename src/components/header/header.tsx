@@ -1,6 +1,5 @@
-import { component$, useStylesScoped$ } from '@builder.io/qwik';
-import { signIn } from '~/lib/frameworks-qwik/client';
-import { useSessionContext } from '~/lib/frameworks-qwik/SessionContext';
+import { component$, Resource, useStylesScoped$ } from '@builder.io/qwik';
+import { useSessionContext } from '~/lib/frameworks-qwik/sessionContext';
 import { QwikLogo } from '../icons/qwik';
 import styles from './header.css?inline';
 
@@ -32,7 +31,11 @@ export default component$(() => {
           </a>
         </li>
         <li>
-          <span>{session.user?.name}</span>
+          <Resource value={session} onResolved={(session) => (
+            <>
+              {session?.user?.name}
+            </>
+          )} />
         </li>
       </ul>
     </header>

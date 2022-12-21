@@ -1,5 +1,5 @@
 import { Cookie, CookieOptions, RequestContext, RequestEvent, RequestHandler, ResponseContext } from "@builder.io/qwik-city";
-import { AuthAction, AuthHandler, AuthOptions } from "@auth/core";
+import { AuthAction, AuthHandler, AuthOptions, Session } from "@auth/core";
 import { parseString } from 'set-cookie-parser';
 
 export interface QwikCityAuthOptions extends AuthOptions {
@@ -55,8 +55,8 @@ async function getBody(req: RequestContext): Promise<Record<string, any> | undef
   }
 }
 
-const requestContextToRequest = (requestContext: RequestContext, body?: Record<string, any>): Request => {
-  const url = new URL(requestContext.url.replace(/\/$/, ""));
+export const requestContextToRequest = (requestContext: RequestContext, body?: Record<string, any>, newUrl?: string): Request => {
+  const url = new URL((newUrl ?? requestContext.url).replace(/\/$/, ""));
 
   return new Request(url, {
     method: requestContext.method,
@@ -75,7 +75,7 @@ async function QwikCityAuthHandler(
   const body = await getBody(request);
   const req = requestContextToRequest(request, body);
 
-  const [action] = url.pathname.slice(prefix.length + 1).split("/")
+  const [action] = url.pathname.slice(prefix.length + 1).split("/");
   if (
     actions.includes(action as AuthAction) &&
     url.pathname.startsWith(prefix + "/")
@@ -102,3 +102,22 @@ export default function QwikCityAuth(options: QwikCityAuthOptions): {
     onRequest: (event) => QwikCityAuthHandler(event, prefix, authOptions),
   }
 }
+
+export const getServerSession = async (
+  event: RequestEvent,
+  authOptions: AuthOptions
+): Promise<Session | null> => {
+  const { cookie, request, response, url } = event;
+  url.pathname = "/api/auth/session";
+  request.url = url.toString();
+
+  const req = requestContextToRequest(request);
+
+  const res = await AuthHandler(req, authOptions);
+  const value = await processResponse(res, response, cookie);
+
+  if (value && typeof value !== "string" && Object.keys(value).length) {
+    return value;
+  }
+  return null;
+};

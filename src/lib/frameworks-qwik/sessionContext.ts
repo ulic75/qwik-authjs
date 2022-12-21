@@ -6,7 +6,7 @@ import {
 } from "@builder.io/qwik";
 import type { Session } from "@auth/core";
 
-type SessionContextState = ResourceReturn<Session | null>;;
+type SessionContextState = ResourceReturn<Session | null>;
 
 export const SessionContext = createContext<SessionContextState>("session-context2");
 

@@ -91,12 +91,12 @@ export default function QwikCityAuth(options: QwikCityAuthOptions): {
   onRequest: RequestHandler,
 } {
   const { prefix = "/api/auth", ...authOptions } = options
-  authOptions.secret ??= import.meta.env.VITE_AUTH_SECRET
+  authOptions.secret ??= import.meta.env.VITE_AUTH_SECRET;
   authOptions.trustHost ??= !!(
     import.meta.env.AUTH_TRUST_HOST ??
     import.meta.env.VERCEL ??
     import.meta.env.DEV
-  )
+  );
 
   return {
     onRequest: (event) => QwikCityAuthHandler(event, prefix, authOptions),
@@ -107,6 +107,7 @@ export const getServerSession = async (
   event: RequestEvent,
   authOptions: AuthOptions
 ): Promise<Session | null> => {
+  authOptions.secret ??= import.meta.env.VITE_AUTH_SECRET;
   const { cookie, request, response, url } = event;
   url.pathname = "/api/auth/session";
   request.url = url.toString();

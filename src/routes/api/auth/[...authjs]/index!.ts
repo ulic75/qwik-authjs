@@ -14,6 +14,5 @@ export const { onRequest } = QwikCityAuth({
       clientSecret: import.meta.env.VITE_AUTH0_SECRET,
       issuer: import.meta.env.VITE_AUTH0_ISSUER
     }),
-  ],
-  secret: import.meta.env.VITE_SECRET,
+  ]
 });

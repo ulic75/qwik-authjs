@@ -16,7 +16,6 @@ const authOptions: AuthOptions = {
       issuer: import.meta.env.VITE_AUTH0_ISSUER
     }),
   ],
-  secret: import.meta.env.VITE_SECRET,
   trustHost: true
 }
 

@@ -37,6 +37,13 @@ export default component$(() => {
             </>
           )} />
         </li>
+        <li>
+          <Resource value={session} onResolved={(session) => (
+            <>
+              {session ? <a href="/api/auth/signout">Sign Out</a> : <a href="/api/auth/signin">Sign In</a>}
+            </>
+          )} />
+        </li>
       </ul>
     </header>
   );

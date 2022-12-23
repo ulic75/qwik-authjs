@@ -16,7 +16,6 @@ const authOptions: AuthOptions = {
       issuer: import.meta.env.VITE_AUTH0_ISSUER
     }),
   ],
-  trustHost: true
 }
 
 export const withSession = async (event: RequestEvent) => {

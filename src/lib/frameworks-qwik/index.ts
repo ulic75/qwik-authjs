@@ -108,6 +108,11 @@ export const getServerSession = async (
   authOptions: AuthOptions
 ): Promise<Session | null> => {
   authOptions.secret ??= import.meta.env.VITE_AUTH_SECRET;
+  authOptions.trustHost ??= !!(
+    import.meta.env.AUTH_TRUST_HOST ??
+    import.meta.env.VERCEL ??
+    import.meta.env.DEV
+  );
   const { cookie, request, response, url } = event;
   url.pathname = "/api/auth/session";
   request.url = url.toString();

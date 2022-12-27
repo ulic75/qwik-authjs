@@ -1,3 +1,15 @@
+import { AuthOptions } from "@auth/core";
+
+export type ContentType = 'html' | 'json';
+
+export interface QwikCityAuthOptions extends AuthOptions {
+  /**
+   * Defines the base path for the auth routes.
+   * @default '/api/auth'
+   */
+  prefix?: string
+}
+
 export type LiteralUnion<T extends U, U = string> =
   | T
   | (U & Record<never, never>);

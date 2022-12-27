@@ -3,7 +3,7 @@ import {
   useContext,
   useContextProvider,
 } from "@builder.io/qwik";
-import type { Session } from "@auth/core";
+import type { Session } from "@auth/core/types";
 
 type SessionContextState = Session;
 

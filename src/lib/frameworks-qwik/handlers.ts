@@ -40,37 +40,32 @@ const QwikCityAuthHandler = async (
 
 }
 
-export const QwikCityAuth = (config: QwikCityAuthConfig = { prefix: "/api/auth", providers: [] }): {
+export const QwikCityAuth = (config: QwikCityAuthConfig = { providers: [] }): {
   onRequest: RequestHandler,
 } => {
-  const { prefix = "/api/auth", ...authConfig } = config
-  authConfig.secret ??= import.meta.env.VITE_AUTH_SECRET
-  authConfig.trustHost ??= !!(
-    import.meta.env.AUTH_TRUST_HOST ??
-    import.meta.env.VERCEL ??
-    import.meta.env.DEV
-  )
+  const env = import.meta.env;
+  config.prefix ??= "/api/auth";
+  config.secret ??= env.VITE_AUTH_SECRET;
+  config.trustHost ??= !!(env.AUTH_TRUST_HOST ?? env.VERCEL ?? env.DEV);
 
   return {
-    onRequest: (event: RequestEvent) => QwikCityAuthHandler(event, prefix, authConfig),
+    onRequest: (event: RequestEvent) => QwikCityAuthHandler(event, config.prefix!, config),
   }
 }
 
 export const getSession = async (
   event: RequestEvent,
-  authConfig: QwikCityAuthConfig = { prefix: '/api/auth', providers: [] }
+  config: QwikCityAuthConfig = { providers: [] }
 ): Promise<Session | null> => {
+  config.prefix ??= "/api/auth";
+  config.secret ??= import.meta.env.VITE_AUTH_SECRET;
+  config.trustHost ??= true;
+
   const { request, url } = event;
-  url.pathname = `${authConfig.prefix}/session`;
-  authConfig.secret ??= import.meta.env.VITE_AUTH_SECRET;
-  authConfig.trustHost ??= !!(
-    import.meta.env.AUTH_TRUST_HOST ??
-    import.meta.env.VERCEL ??
-    import.meta.env.DEV
-  );
+  url.pathname = `${config.prefix}/session`;
 
   const req = requestContextToRequest(request, undefined, url.toString());
-  const res = await Auth(req, authConfig);
+  const res = await Auth(req, config);
   const { content, contentType } = await processResponse(res);
 
   if (content && typeof content !== "string" && Object.keys(content).length && contentType === "json") {

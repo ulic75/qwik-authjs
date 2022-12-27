@@ -12,7 +12,6 @@ type WithProtectedSessionOptions = {
 
 export const withProtectedSession = async (event: RequestEvent, options: WithProtectedSessionOptions = {}) => {
   const session = await getSession(event);
-  console.log({session});
 
   if (!session)
     throw event.redirect(302, options.redirectTo || "/api/auth/signin");

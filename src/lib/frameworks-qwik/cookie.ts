@@ -56,10 +56,6 @@ export function parseCookie(setCookieValue: string, options: SetCookieParserOpti
   let name = parsed.name;
   let value = parsed.value;
 
-  // options = options
-  //   ? Object.assign({}, defaultParseOptions, options)
-  //   : defaultParseOptions;
-
   try {
     value = options.decodeValues ? decodeURIComponent(value) : value; // decode cookie value
   } catch (e) {

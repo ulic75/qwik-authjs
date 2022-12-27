@@ -1,15 +1,17 @@
-import { AuthAction, AuthHandler, AuthOptions, Session } from "@auth/core";
+import { Auth } from "@auth/core";
+import type { AuthAction, AuthConfig, Session } from "@auth/core/types"
 import { RequestEvent, RequestHandler } from "@builder.io/qwik-city/middleware/request-handler";
-import { QwikCityAuthOptions } from "./types";
+
+import { QwikCityAuthConfig } from "./types";
 import { getBody, processResponse, requestContextToRequest } from "./utils";
 
 // prettier-ignore
-const actions: AuthAction[] = [ "providers", "session", "csrf", "signin", "signout", "callback", "verify-request", "error", "_log" ];
+const actions: AuthAction[] = [ "providers", "session", "csrf", "signin", "signout", "callback", "verify-request", "error" ];
 
 const QwikCityAuthHandler = async (
   event: RequestEvent,
   prefix: string,
-  authOptions: AuthOptions
+  config: AuthConfig
 ) => {
   const { request, url, json, html, cookie, error } = event;
   const body = await getBody(request);
@@ -20,7 +22,7 @@ const QwikCityAuthHandler = async (
     actions.includes(action as AuthAction) &&
     url.pathname.startsWith(prefix + "/")
   ) {
-    const res = await AuthHandler(req, authOptions);
+    const res = await Auth(req, config);
     const { content, contentType, redirect, cookies } = await processResponse(res);
 
     cookies.forEach(c => cookie.set(c.name, c.value, c.options));
@@ -38,37 +40,37 @@ const QwikCityAuthHandler = async (
 
 }
 
-export const QwikCityAuth = (options: QwikCityAuthOptions = { prefix: "/api/auth", providers: [] }): {
+export const QwikCityAuth = (config: QwikCityAuthConfig = { prefix: "/api/auth", providers: [] }): {
   onRequest: RequestHandler,
 } => {
-  const { prefix = "/api/auth", ...authOptions } = options
-  authOptions.secret ??= import.meta.env.VITE_AUTH_SECRET
-  authOptions.trustHost ??= !!(
+  const { prefix = "/api/auth", ...authConfig } = config
+  authConfig.secret ??= import.meta.env.VITE_AUTH_SECRET
+  authConfig.trustHost ??= !!(
     import.meta.env.AUTH_TRUST_HOST ??
     import.meta.env.VERCEL ??
     import.meta.env.DEV
   )
 
   return {
-    onRequest: (event: RequestEvent) => QwikCityAuthHandler(event, prefix, authOptions),
+    onRequest: (event: RequestEvent) => QwikCityAuthHandler(event, prefix, authConfig),
   }
 }
 
 export const getSession = async (
   event: RequestEvent,
-  authOptions: QwikCityAuthOptions = { prefix: '/api/auth', providers: [] }
+  authConfig: QwikCityAuthConfig = { prefix: '/api/auth', providers: [] }
 ): Promise<Session | null> => {
   const { request, url } = event;
-  url.pathname = `${authOptions.prefix}/session`;
-  authOptions.secret ??= import.meta.env.VITE_AUTH_SECRET;
-  authOptions.trustHost ??= !!(
+  url.pathname = `${authConfig.prefix}/session`;
+  authConfig.secret ??= import.meta.env.VITE_AUTH_SECRET;
+  authConfig.trustHost ??= !!(
     import.meta.env.AUTH_TRUST_HOST ??
     import.meta.env.VERCEL ??
     import.meta.env.DEV
   );
 
   const req = requestContextToRequest(request, undefined, url.toString());
-  const res = await AuthHandler(req, authOptions);
+  const res = await Auth(req, authConfig);
   const { content, contentType } = await processResponse(res);
 
   if (content && typeof content !== "string" && Object.keys(content).length && contentType === "json") {

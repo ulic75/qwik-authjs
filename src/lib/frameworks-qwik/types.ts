@@ -1,8 +1,8 @@
-import { AuthOptions } from "@auth/core";
+import type { AuthConfig } from "@auth/core/types";
 
 export type ContentType = 'html' | 'json';
 
-export interface QwikCityAuthOptions extends AuthOptions {
+export interface QwikCityAuthConfig extends AuthConfig {
   /**
    * Defines the base path for the auth routes.
    * @default '/api/auth'

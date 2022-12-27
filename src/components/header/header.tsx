@@ -1,5 +1,5 @@
-import { component$, Resource, useStylesScoped$ } from '@builder.io/qwik';
-import { useSessionContext } from '~/lib/frameworks-qwik/sessionContext';
+import { component$, useStylesScoped$ } from '@builder.io/qwik';
+import { useSessionContext } from '~/lib/frameworks-qwik';
 import { QwikLogo } from '../icons/qwik';
 import styles from './header.css?inline';
 
@@ -30,12 +30,13 @@ export default component$(() => {
             Tutorials
           </a>
         </li>
+        {session && (
+          <li>
+            {session.user?.name}
+          </li>
+        )}
         <li>
-          <Resource value={session} onResolved={(session) => (
-            <>
-              {session?.user?.name}
-            </>
-          )} />
+          {session?.expires ? <a href="/api/auth/signout">Sign Out</a> : <a href="/api/auth/signin">Sign In</a>}
         </li>
         <li>
           <Resource value={session} onResolved={(session) => (

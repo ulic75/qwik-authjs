@@ -3,7 +3,6 @@ import type {
   RedirectableProviderType,
 } from "@auth/core/providers";
 import { $ } from "@builder.io/qwik";
-import { useLocation } from "@builder.io/qwik-city";
 
 import { LiteralUnion, SignInAuthorizationParams, SignInOptions, SignOutParams } from "./types";
 
@@ -14,7 +13,6 @@ export const signIn = $(async <
       ? P | BuiltInProviderType
       : BuiltInProviderType
   >, options?: SignInOptions, authorizationParams?: SignInAuthorizationParams) => {
-  // const { href } = useLocation();
   const { callbackUrl = window.location.href, redirect = true } = options ?? {};
 
   const isCredentials = providerId === "credentials";
@@ -22,15 +20,15 @@ export const signIn = $(async <
   const isSupportingReturn = isCredentials || isEmail;
 
   // TODO: Handle custom base path
-  const signInUrl = `/api/auth/${
+  const signInUrl = `http://localhost:5173/api/auth/${
     isCredentials ? "callback" : "signin"
   }/${providerId}`;
 
   const _signInUrl = `${signInUrl}?${new URLSearchParams(authorizationParams)}`;
 
-  const csrfTokenResponse = await fetch("/api/auth/csrf");
+  const csrfTokenResponse = await fetch("http://localhost:5173/api/auth/csrf");
   const { csrfToken } = await csrfTokenResponse.json();
-  console.log(csrfToken);
+  console.log({_signInUrl});
 
   const res = await fetch(_signInUrl, {
     method: "post",
@@ -47,13 +45,14 @@ export const signIn = $(async <
   });
 
   const data = await res.clone().json();
+  console.log({data});
   const error = new URL(data.url).searchParams.get("error");
 
   if (redirect || !isSupportingReturn || !error) {
     // TODO: Do not redirect for Credentials and Email providers by default in next major
-    window.location.href = data.url ?? callbackUrl
+    // window.location.href = data.url ?? callbackUrl
     // If url contains a hash, the browser does not reload the page. We reload manually
-    if (data.url.includes("#")) window.location.reload()
+    // if (data.url.includes("#")) window.location.reload()
     return
   }
 

@@ -14,29 +14,16 @@ export default component$(() => {
           <QwikLogo />
         </a>
       </div>
+      <h2>- AuthJS</h2>
       <ul>
         <li>
-          <a href="https://qwik.builder.io/docs/components/overview/" target="_blank">
-            Docs
-          </a>
+          <a href="/">Home</a>
         </li>
         <li>
-          <a href="https://qwik.builder.io/examples/introduction/hello-world/" target="_blank">
-            Examples
-          </a>
+          <a href="/protected">Protected</a>
         </li>
         <li>
-          <a href="https://qwik.builder.io/tutorial/welcome/overview/" target="_blank">
-            Tutorials
-          </a>
-        </li>
-        {session && (
-          <li>
-            {session.user?.name}
-          </li>
-        )}
-        <li>
-          {session?.expires ? <a href="/api/auth/signout">Sign Out</a> : <a href="/api/auth/signin">Sign In</a>}
+          {session ? <a href="/api/auth/signout">Sign Out</a> : <a href="/api/auth/signin">Sign In</a>}
         </li>
       </ul>
     </header>

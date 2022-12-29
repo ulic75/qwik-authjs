@@ -19,5 +19,3 @@ export const useSessionContextProvider = (state: SessionContextState) => {
 export const useSessionContext = () => {
   return useContext(SessionContext, null);
 };
-
-export const sessionLoader$ = loader$(async (event) => getSession(event.request, event.url));

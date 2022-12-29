@@ -1,2 +1,2 @@
-export { QwikCityAuth } from './handlers';
-export { useSessionContext, useSessionContextProvider, sessionLoader$ } from './session';
+export { QwikCityAuth, getSession } from './handlers';
+export { useSessionContext, useSessionContextProvider } from './session';

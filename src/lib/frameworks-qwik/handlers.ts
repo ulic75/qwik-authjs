@@ -1,6 +1,6 @@
 import { Auth } from "@auth/core";
 import type { AuthAction, AuthConfig, Session } from "@auth/core/types"
-import { RequestEvent, RequestHandler } from "@builder.io/qwik-city/middleware/request-handler";
+import { RequestContext, RequestEvent, RequestHandler } from "@builder.io/qwik-city/middleware/request-handler";
 
 import { QwikCityAuthConfig } from "./types";
 import { getBody, processResponse, requestContextToRequest } from "./utils";
@@ -54,14 +54,14 @@ export const QwikCityAuth = (config: QwikCityAuthConfig = { providers: [] }): {
 }
 
 export const getSession = async (
-  event: RequestEvent,
+  request: RequestContext,
+  url: URL,
   config: QwikCityAuthConfig = { providers: [] }
 ): Promise<Session | null> => {
   config.prefix ??= "/api/auth";
   config.secret ??= import.meta.env.VITE_AUTH_SECRET;
   config.trustHost ??= true;
 
-  const { request, url } = event;
   url.pathname = `${config.prefix}/session`;
 
   const req = requestContextToRequest(request, undefined, url.toString());

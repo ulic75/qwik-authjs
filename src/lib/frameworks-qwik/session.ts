@@ -1,9 +1,12 @@
+import type { Session } from "@auth/core/types";
 import {
   createContext,
   useContext,
   useContextProvider,
 } from "@builder.io/qwik";
-import type { Session } from "@auth/core/types";
+import { loader$ } from "@builder.io/qwik-city";
+
+import { getSession } from "./handlers";
 
 type SessionContextState = Session;
 
@@ -16,3 +19,5 @@ export const useSessionContextProvider = (state: SessionContextState) => {
 export const useSessionContext = () => {
   return useContext(SessionContext, null);
 };
+
+export const sessionLoader$ = loader$(async (event) => getSession(event.request, event.url));

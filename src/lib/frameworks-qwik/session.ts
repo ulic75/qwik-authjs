@@ -4,9 +4,6 @@ import {
   useContext,
   useContextProvider,
 } from "@builder.io/qwik";
-import { loader$ } from "@builder.io/qwik-city";
-
-import { getSession } from "./handlers";
 
 type SessionContextState = Session;
 

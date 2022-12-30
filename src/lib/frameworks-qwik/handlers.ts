@@ -67,7 +67,7 @@ export const getServerProviders = async (request: RequestContext, config: QwikCi
   return null;
 }
 
-export const getSession = async (
+export const getServerSession = async (
   request: RequestContext,
   config: QwikCityAuthConfig = { providers: [] }
 ): Promise<Session | null> => {

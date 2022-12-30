@@ -53,6 +53,20 @@ export const QwikCityAuth = (config: QwikCityAuthConfig = { providers: [] }): {
   }
 }
 
+export const getServerProviders = async (request: RequestContext, config: QwikCityAuthConfig = { providers: [] }) => {
+  config.prefix ??= "/api/auth";
+
+  const url = new URL(request.url);
+  url.pathname = `${config.prefix}/providers`;
+
+  const res = await fetch(url.toString());
+
+  if (res.status === 200 && res.headers.get('content-type')?.includes("application/json")) {
+    return await res.json();
+  }
+  return null;
+}
+
 export const getSession = async (
   request: RequestContext,
   config: QwikCityAuthConfig = { providers: [] }

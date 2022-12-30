@@ -55,13 +55,13 @@ export const QwikCityAuth = (config: QwikCityAuthConfig = { providers: [] }): {
 
 export const getSession = async (
   request: RequestContext,
-  url: URL,
   config: QwikCityAuthConfig = { providers: [] }
 ): Promise<Session | null> => {
   config.prefix ??= "/api/auth";
   config.secret ??= import.meta.env.VITE_AUTH_SECRET;
   config.trustHost ??= true;
 
+  const url = new URL(request.url);
   url.pathname = `${config.prefix}/session`;
 
   const req = requestContextToRequest(request, undefined, url.toString());

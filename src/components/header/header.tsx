@@ -1,5 +1,6 @@
 import { component$, useStylesScoped$ } from '@builder.io/qwik';
 import { useSessionContext } from '~/lib/frameworks-qwik';
+import { signIn, signOut } from '~/lib/frameworks-qwik/client';
 import { QwikLogo } from '../icons/qwik';
 import styles from './header.css?inline';
 
@@ -23,7 +24,7 @@ export default component$(() => {
           <a href="/protected">Protected</a>
         </li>
         <li>
-          {session ? <a href="/api/auth/signout">Sign Out</a> : <a href="/api/auth/signin">Sign In</a>}
+          {session ? <a onClick$={() => signOut()}>Sign Out</a> : <a onClick$={() => signIn("auth0")}>Sign In</a>}
         </li>
       </ul>
     </header>

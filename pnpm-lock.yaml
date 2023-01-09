@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@auth/core': 0.2.5
   '@builder.io/qwik': 0.16.2
-  '@builder.io/qwik-city': 0.1.0-beta6
+  '@builder.io/qwik-city': 0.1.0-beta9
   '@next-auth/prisma-adapter': ^1.0.5
   '@prisma/client': ^4.7.1
   '@types/eslint': 8.4.10
@@ -28,7 +28,7 @@ dependencies:
 
 devDependencies:
   '@builder.io/qwik': 0.16.2_undici@5.14.0
-  '@builder.io/qwik-city': 0.1.0-beta6_@builder.io+qwik@0.16.2
+  '@builder.io/qwik-city': 0.1.0-beta9_@builder.io+qwik@0.16.2
   '@types/eslint': 8.4.10
   '@types/node': 18.11.17
   '@types/node-fetch': 2.6.2
@@ -62,10 +62,10 @@ packages:
       preact-render-to-string: 5.2.3_preact@10.11.3
     dev: false
 
-  /@builder.io/qwik-city/0.1.0-beta6_@builder.io+qwik@0.16.2:
-    resolution: {integrity: sha512-RdfMd9bKP9p/aIWtdR16dodBU8eBz78Y4FPUWrcGYfeSFjSB+arNy+M+gKNFpoYNmYgW7qz4J+N17DzVPfgY3A==}
+  /@builder.io/qwik-city/0.1.0-beta9_@builder.io+qwik@0.16.2:
+    resolution: {integrity: sha512-IPRIJUkTnQd1dCUTlkS3nLxpB02yUZziZ4b+b5qTbXAEnWDRWIhw4XgJJbZB2rTzZiQ1+8PebHqWNIoh+uBmSA==}
     peerDependencies:
-      '@builder.io/qwik': '>=0.16.0'
+      '@builder.io/qwik': '>=0.16.2'
     dependencies:
       '@builder.io/qwik': 0.16.2_undici@5.14.0
       '@mdx-js/mdx': 2.2.1

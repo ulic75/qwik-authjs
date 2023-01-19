@@ -6,8 +6,9 @@ export default component$(() => {
     <>
       <h1>QwikCity Auth Example</h1>
       <p>
-        This is an example site to demonstrate how to use <a href="https://qwik.builder.io/">Qwik</a>&nbsp;
-        with <a href="https://github.com/ulic75/qwik-authjs">Qwik AuthJS</a> for authentication.
+        This is an example site to demonstrate how to use{' '}
+        <a href="https://qwik.builder.io/">Qwik</a> with{' '}
+        <a href="https://github.com/ulic75/qwik-authjs">Qwik AuthJS</a> for authentication.
       </p>
     </>
   );

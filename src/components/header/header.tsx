@@ -24,7 +24,11 @@ export default component$(() => {
           <a href="/protected">Protected</a>
         </li>
         <li>
-          {session ? <a onClick$={() => signOut()}>Sign Out</a> : <a onClick$={() => signIn("auth0")}>Sign In</a>}
+          {session ? (
+            <a onClick$={() => signOut()}>Sign Out</a>
+          ) : (
+            <a onClick$={() => signIn('auth0')}>Sign In</a>
+          )}
         </li>
       </ul>
     </header>

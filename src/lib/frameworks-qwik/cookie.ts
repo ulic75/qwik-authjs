@@ -3,7 +3,7 @@
  * https://github.com/nfriedly/set-cookie-parser
  */
 
-type SameSite = "lax" | "strict" | "none";
+type SameSite = 'lax' | 'strict' | 'none';
 
 interface Cookie {
   name: string;
@@ -20,7 +20,7 @@ type SetCookieParserOptions = {
   decodeValues: boolean;
   map: boolean;
   silent: boolean;
-}
+};
 
 const SAMESITE = {
   lax: 'lax',
@@ -29,18 +29,18 @@ const SAMESITE = {
 } as const;
 
 function isNonEmptyString(str: string) {
-  return typeof str === "string" && !!str.trim();
+  return typeof str === 'string' && !!str.trim();
 }
 
 function parseNameValuePair(nameValuePairStr: string) {
   // Parses name-value-pair according to rfc6265bis draft
 
-  let name = "";
+  let name = '';
   let value: string;
-  let nameValueArr = nameValuePairStr.split("=");
+  let nameValueArr = nameValuePairStr.split('=');
   if (nameValueArr.length > 1) {
-    name = nameValueArr.shift() ?? "";
-    value = nameValueArr.join("="); // everything after the first =, joined by a "=" if there was more than one part
+    name = nameValueArr.shift() ?? '';
+    value = nameValueArr.join('='); // everything after the first =, joined by a "=" if there was more than one part
   } else {
     value = nameValuePairStr;
   }
@@ -48,10 +48,13 @@ function parseNameValuePair(nameValuePairStr: string) {
   return { name, value };
 }
 
-export function parseCookie(setCookieValue: string, options: SetCookieParserOptions = { decodeValues: true, map: false, silent: false }) {
-  const parts = setCookieValue.split(";").filter(isNonEmptyString);
+export function parseCookie(
+  setCookieValue: string,
+  options: SetCookieParserOptions = { decodeValues: true, map: false, silent: false }
+) {
+  const parts = setCookieValue.split(';').filter(isNonEmptyString);
 
-  const nameValuePairStr = parts.shift() ?? "";
+  const nameValuePairStr = parts.shift() ?? '';
   const parsed = parseNameValuePair(nameValuePairStr);
   let name = parsed.name;
   let value = parsed.value;
@@ -70,20 +73,20 @@ export function parseCookie(setCookieValue: string, options: SetCookieParserOpti
   const cookie: Cookie = { name, value };
 
   parts.forEach(function (part: string) {
-    const sides = part.split("=");
-    const key = sides.shift()?.trimStart().toLowerCase() ?? "";
-    var value = sides.join("=");
+    const sides = part.split('=');
+    const key = sides.shift()?.trimStart().toLowerCase() ?? '';
+    var value = sides.join('=');
 
-    if (key === "expires") {
+    if (key === 'expires') {
       cookie.expires = new Date(value);
-    } else if (key === "max-age") {
+    } else if (key === 'max-age') {
       cookie.maxAge = parseInt(value, 10);
-    } else if (key === "secure") {
+    } else if (key === 'secure') {
       cookie.secure = true;
-    } else if (key === "httponly") {
+    } else if (key === 'httponly') {
       cookie.httpOnly = true;
-    } else if (key === "samesite") {
-      cookie.sameSite = SAMESITE[value as SameSite] ? value as SameSite : "lax";
+    } else if (key === 'samesite') {
+      cookie.sameSite = SAMESITE[value as SameSite] ? (value as SameSite) : 'lax';
     } else {
       cookie[key] = value;
     }
@@ -105,7 +108,7 @@ export function splitCookieHeader(setCookieHeader: string) {
   if (Array.isArray(setCookieHeader)) {
     return setCookieHeader;
   }
-  if (typeof setCookieHeader !== "string") {
+  if (typeof setCookieHeader !== 'string') {
     return [];
   }
 
@@ -127,7 +130,7 @@ export function splitCookieHeader(setCookieHeader: string) {
   function notSpecialChar(): boolean {
     character = setCookieHeader.charAt(position);
 
-    return character !== "=" && character !== ";" && character !== ",";
+    return character !== '=' && character !== ';' && character !== ',';
   }
 
   while (position < setCookieHeader.length) {
@@ -136,7 +139,7 @@ export function splitCookieHeader(setCookieHeader: string) {
 
     while (skipWhitespace()) {
       character = setCookieHeader.charAt(position);
-      if (character === ",") {
+      if (character === ',') {
         // ',' is a cookie separator if we have later first '=', not ';' or ','
         lastComma = position;
         position += 1;
@@ -149,7 +152,7 @@ export function splitCookieHeader(setCookieHeader: string) {
         }
 
         // currently special character
-        if (position < setCookieHeader.length && setCookieHeader.charAt(position) === "=") {
+        if (position < setCookieHeader.length && setCookieHeader.charAt(position) === '=') {
           // we found cookies separator
           cookiesSeparatorFound = true;
           // pos is inside the next cookie, so back up and return it.

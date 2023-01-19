@@ -6,10 +6,10 @@ import { useSessionContextProvider, getServerSession } from '~/lib/frameworks-qw
 
 import Header from '../components/header/header';
 
-export const sessionLoader = loader$(async ({request}) => {
+export const sessionLoader = loader$(async ({ request }) => {
   const session = await getServerSession(request);
   return session;
-})
+});
 
 export default component$(() => {
   const session = sessionLoader.use().value as Session;

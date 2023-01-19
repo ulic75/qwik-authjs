@@ -1,4 +1,4 @@
-import type { AuthConfig } from "@auth/core/types";
+import type { AuthConfig } from '@auth/core/types';
 
 export type ContentType = 'html' | 'json';
 
@@ -7,12 +7,10 @@ export interface QwikCityAuthConfig extends AuthConfig {
    * Defines the base path for the auth routes.
    * @default '/api/auth'
    */
-  prefix?: string
+  prefix?: string;
 }
 
-export type LiteralUnion<T extends U, U = string> =
-  | T
-  | (U & Record<never, never>);
+export type LiteralUnion<T extends U, U = string> = T | (U & Record<never, never>);
 
 export interface SignInOptions extends Record<string, unknown> {
   /**
@@ -20,9 +18,9 @@ export interface SignInOptions extends Record<string, unknown> {
    *
    * [Documentation](https://next-auth.js.org/getting-started/client#specifying-a-callbackurl)
    */
-  callbackUrl?: string
+  callbackUrl?: string;
   /** [Documentation](https://next-auth.js.org/getting-started/client#using-the-redirect-false-option) */
-  redirect?: boolean
+  redirect?: boolean;
 }
 
 /** Match `inputType` of `new URLSearchParams(inputType)` */
@@ -34,7 +32,7 @@ export type SignInAuthorizationParams =
 
 export interface SignOutParams<R extends boolean = true> {
   /** [Documentation](https://next-auth.js.org/getting-started/client#specifying-a-callbackurl-1) */
-  callbackUrl?: string
+  callbackUrl?: string;
   /** [Documentation](https://next-auth.js.org/getting-started/client#using-the-redirect-false-option-1 */
-  redirect?: R
+  redirect?: R;
 }

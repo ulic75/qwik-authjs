@@ -38,10 +38,10 @@ export const QwikCityAuth = (
 ): {
   onRequest: RequestHandler;
 } => {
-  const env = import.meta.env;
+  const env = process.env;
   config.prefix ??= '/api/auth';
-  config.secret ??= env.VITE_AUTH_SECRET;
-  config.trustHost ??= !!(env.AUTH_TRUST_HOST ?? env.VERCEL ?? env.DEV);
+  config.secret ??= env.AUTH_SECRET;
+  config.trustHost ??= !!(env.TRUST_HOST ?? env.VERCEL ?? import.meta.env.DEV);
 
   return {
     onRequest: (event: RequestEvent) => QwikCityAuthHandler(event, config.prefix!, config),
@@ -70,7 +70,7 @@ export const getServerSession = async (
   config: QwikCityAuthConfig = { providers: [] }
 ): Promise<Session | null> => {
   config.prefix ??= '/api/auth';
-  config.secret ??= import.meta.env.VITE_AUTH_SECRET;
+  config.secret ??= process.env.AUTH_SECRET;
   config.trustHost ??= true;
 
   const url = new URL(request.url);

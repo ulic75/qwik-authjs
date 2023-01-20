@@ -6,6 +6,7 @@ import { QwikCityAuth } from '~/lib/frameworks-qwik';
 
 export const { onRequest } = QwikCityAuth({
   providers: [
+    //@ts-expect-error issue https://github.com/nextauthjs/next-auth/issues/6174
     Credentials({
       name: 'Email',
       credentials: {
@@ -19,14 +20,16 @@ export const { onRequest } = QwikCityAuth({
         return null;
       },
     }),
+    //@ts-expect-error issue https://github.com/nextauthjs/next-auth/issues/6174
     Auth0({
-      clientId: import.meta.env.VITE_AUTH0_ID,
-      clientSecret: import.meta.env.VITE_AUTH0_SECRET,
-      issuer: import.meta.env.VITE_AUTH0_ISSUER,
+      clientId: process.env.AUTH0_ID || '',
+      clientSecret: process.env.AUTH0_SECRET || '',
+      issuer: process.env.AUTH0_ISSUER,
     }),
+    //@ts-expect-error issue https://github.com/nextauthjs/next-auth/issues/6174
     Github({
-      clientId: import.meta.env.VITE_GITHUB_ID,
-      clientSecret: import.meta.env.VITE_GITHUB_SECRET,
+      clientId: process.env.GITHUB_ID || '',
+      clientSecret: process.env.GITHUB_SECRET || '',
     }),
   ],
 });

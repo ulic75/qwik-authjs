@@ -1,25 +1,19 @@
 import { Auth } from '@auth/core';
 import type { AuthAction, AuthConfig, Session } from '@auth/core/types';
-import {
-  RequestContext,
-  RequestEvent,
-  RequestHandler,
-} from '@builder.io/qwik-city/middleware/request-handler';
+import { RequestEvent, RequestHandler } from '@builder.io/qwik-city';
 
 import { QwikCityAuthConfig } from './types';
-import { getBody, processResponse, requestContextToRequest } from './utils';
+import { processResponse } from './utils';
 
 // prettier-ignore
 const actions: AuthAction[] = [ "providers", "session", "csrf", "signin", "signout", "callback", "verify-request", "error" ];
 
 const QwikCityAuthHandler = async (event: RequestEvent, prefix: string, config: AuthConfig) => {
   const { request, url, json, html, cookie, error } = event;
-  const body = await getBody(request);
-  const req = requestContextToRequest(request, body);
 
   const [action] = url.pathname.slice(prefix.length + 1).split('/');
   if (actions.includes(action as AuthAction) && url.pathname.startsWith(prefix + '/')) {
-    const res = await Auth(req, config);
+    const res = await Auth(request, config);
     const { content, contentType, redirect, cookies } = await processResponse(res);
 
     cookies.forEach((c) => cookie.set(c.name, c.value, c.options));
@@ -49,7 +43,7 @@ export const QwikCityAuth = (
 };
 
 export const getServerProviders = async (
-  request: RequestContext,
+  request: Request,
   config: QwikCityAuthConfig = { providers: [] }
 ) => {
   config.prefix ??= '/api/auth';
@@ -66,7 +60,7 @@ export const getServerProviders = async (
 };
 
 export const getServerSession = async (
-  request: RequestContext,
+  request: Request,
   config: QwikCityAuthConfig = { providers: [] }
 ): Promise<Session | null> => {
   config.prefix ??= '/api/auth';
@@ -76,8 +70,9 @@ export const getServerSession = async (
   const url = new URL(request.url);
   url.pathname = `${config.prefix}/session`;
 
-  const req = requestContextToRequest(request, undefined, url.toString());
-  const res = await Auth(req, config);
+  const sessionRequest = new Request(url, request);
+
+  const res = await Auth(sessionRequest, config);
   const { content, contentType } = await processResponse(res);
 
   if (
